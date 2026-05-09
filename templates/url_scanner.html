@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>URL Scanner - Phish Guard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#0b1120] text-white flex">
+
+<!-- SIDEBAR -->
+<div class="w-64 bg-[#0a0f1c] h-screen p-5 border-r border-gray-800">
+
+    <h1 class="text-2xl font-bold mb-8">🛡️ Phish Guard</h1>
+
+    <ul class="space-y-4">
+        <li><a href="/dashboard" class="block hover:text-blue-400">Dashboard</a></li>
+        <li><a href="/url-scanner" class="block text-blue-400">URL Scanner</a></li>
+        <li><a href="/email-scanner" class="block hover:text-blue-400">Email Scanner</a></li>
+        <li><a href="/domain-analysis" class="block hover:text-blue-400">Domain Analysis</a></li>
+        <li><a href="/threat-intelligence" class="block hover:text-blue-400">Threat Intelligence</a></li>
+        <li><a href="/alerts" class="block hover:text-blue-400">Alerts</a></li>
+        <li><a href="/history" class="block hover:text-blue-400">History</a></li>
+        <li><a href="/settings" class="block hover:text-blue-400">Settings</a></li>
+        <li><a href="/logout" class="text-red-400">Logout</a></li>
+    </ul>
+
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="flex-1 p-10">
+
+    <h2 class="text-3xl font-bold mb-2">URL Scanner</h2>
+    <p class="text-gray-400 mb-6">Scan any URL to detect phishing threats in real-time</p>
+
+    <!-- INPUT -->
+    <form method="POST" class="flex gap-4 mb-8">
+        <input type="text" name="url" placeholder="Enter URL..."
+            class="flex-1 p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none">
+
+        <button class="bg-blue-600 px-6 rounded hover:bg-blue-700">
+            Scan URL
+        </button>
+    </form>
+
+    <!-- RESULT BOX -->
+    {% if prediction %}
+    <div class="p-6 rounded-xl mb-8 border
+        {% if status == 'phishing' %}
+            bg-red-900 border-red-500
+        {% elif status == 'suspicious' %}
+            bg-yellow-900 border-yellow-500
+        {% else %}
+            bg-green-900 border-green-500
+        {% endif %}
+    ">
+
+        <h3 class="text-xl font-bold mb-2">
+            {{ prediction }}
+        </h3>
+
+    </div>
+    {% endif %}
+
+    <!-- GRID SECTION -->
+    <div class="grid grid-cols-3 gap-6">
+
+        <!-- DETAILS -->
+        <div class="bg-gray-900 p-5 rounded-xl border border-gray-700">
+            <h3 class="text-lg font-semibold mb-4">URL Details</h3>
+
+            <p><span class="text-gray-400">Scanned URL:</span> Example.com</p>
+            <p><span class="text-gray-400">IP Address:</span> 192.168.1.1</p>
+            <p><span class="text-gray-400">Scan Time:</span> Now</p>
+            <p><span class="text-gray-400">Result:</span> {{ status }}</p>
+        </div>
+
+        <!-- RISK FACTORS -->
+        <div class="bg-gray-900 p-5 rounded-xl border border-gray-700">
+            <h3 class="text-lg font-semibold mb-4 text-red-400">Risk Factors</h3>
+
+            <ul class="space-y-2 text-sm">
+                <li>⚠️ Suspicious keywords</li>
+                <li>⚠️ No HTTPS</li>
+                <li>⚠️ Unknown domain</li>
+            </ul>
+        </div>
+
+        <!-- RECOMMENDATIONS -->
+        <div class="bg-gray-900 p-5 rounded-xl border border-gray-700">
+            <h3 class="text-lg font-semibold mb-4 text-green-400">What You Can Do</h3>
+
+            <ul class="space-y-2 text-sm">
+                <li>✅ Do not click suspicious links</li>
+                <li>✅ Avoid entering credentials</li>
+                <li>✅ Report phishing site</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <!-- RECENT SCANS -->
+    <div class="mt-10">
+        <h3 class="text-xl font-bold mb-4">Recent Scans</h3>
+
+        <table class="w-full text-left border border-gray-700 rounded-lg overflow-hidden">
+            <thead class="bg-gray-800">
+                <tr>
+                    <th class="p-3">URL</th>
+                    <th class="p-3">Result</th>
+                    <th class="p-3">Status</th>
+                    <th class="p-3">Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr class="border-t border-gray-700">
+                    <td class="p-3">example.com</td>
+                    <td class="p-3 text-green-400">Safe</td>
+                    <td class="p-3">Low</td>
+                    <td class="p-3">Today</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>

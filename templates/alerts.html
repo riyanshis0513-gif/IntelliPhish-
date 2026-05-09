@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Alerts - Phish Guard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#0b1220] text-white">
+
+<div class="flex min-h-screen">
+
+  <!-- SIDEBAR -->
+  <div class="w-64 bg-[#0a0f1c] h-screen p-5 border-r border-gray-800">
+
+    <h1 class="text-2xl font-bold mb-8">🛡️ Phish Guard</h1>
+
+    <ul class="space-y-4">
+        <li><a href="/dashboard" class="block hover:text-blue-400">Dashboard</a></li>
+        <li><a href="/url-scanner" class="block text-blue-400">URL Scanner</a></li>
+        <li><a href="/email-scanner" class="block hover:text-blue-400">Email Scanner</a></li>
+        <li><a href="/domain-analysis" class="block hover:text-blue-400">Domain Analysis</a></li>
+        <li><a href="/threat-intelligence" class="block hover:text-blue-400">Threat Intelligence</a></li>
+        <li><a href="/alerts" class="block hover:text-blue-400">Alerts</a></li>
+        <li><a href="/history" class="block hover:text-blue-400">History</a></li>
+        <li><a href="/settings" class="block hover:text-blue-400">Settings</a></li>
+        <li><a href="/logout" class="text-red-400">Logout</a></li>
+    </ul>
+
+</div>
+
+  <!-- MAIN -->
+  <main class="flex-1 p-8 space-y-6">
+
+    <h2 class="text-3xl font-bold">Threat Alerts</h2>
+
+    <!-- STATS -->
+    <div class="grid grid-cols-4 gap-6">
+      <div class="bg-red-900/30 p-5 rounded-xl">
+        <h3 id="highCount" class="text-3xl text-red-400">{{ high }}</h3>
+        <p>High Risk</p>
+      </div>
+      <div class="bg-yellow-900/30 p-5 rounded-xl">
+        <h3 id="mediumCount" class="text-3xl text-yellow-400">{{ medium }}</h3>
+        <p>Medium Risk</p>
+      </div>
+      <div class="bg-blue-900/30 p-5 rounded-xl">
+        <h3 id="lowCount" class="text-3xl text-blue-400">{{ low }}</h3>
+        <p>Low Risk</p>
+      </div>
+      <div class="bg-green-900/30 p-5 rounded-xl">
+        <h3 id="totalCount" class="text-3xl text-green-400">{{ total }}</h3>
+        <p>Total Alerts</p>
+      </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="flex justify-between bg-[#111827] p-4 rounded-xl">
+
+      <div class="flex gap-3">
+        <select id="typeFilter" class="bg-[#020617] p-2 rounded border border-gray-700">
+          <option value="all">All Types</option>
+          <option value="URL">URL</option>
+          <option value="Email">Email</option>
+        </select>
+
+        <select id="severityFilter" class="bg-[#020617] p-2 rounded border border-gray-700">
+          <option value="all">All Severity</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+      </div>
+
+      <input id="searchInput" type="text" placeholder="Search alerts..."
+        class="bg-[#020617] p-2 rounded border border-gray-700 w-64">
+    </div>
+
+    <!-- TABLE -->
+    <div class="bg-[#111827] rounded-xl overflow-hidden">
+
+      <table class="w-full text-sm">
+        <thead class="bg-[#020617] text-gray-400">
+          <tr>
+            <th class="p-3">Type</th>
+            <th>Source</th>
+            <th>Threat</th>
+            <th>Severity</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for alert in alerts %}
+          <tr class="alert-row border-b border-gray-800"
+              data-type="{{ alert.type }}"
+              data-severity="{{ alert.severity }}"
+              data-source="{{ alert.source | lower }}"
+              data-threat="{{ alert.threat | lower }}">
+
+            <td class="p-3">{{ alert.type }}</td>
+            <td>{{ alert.source }}</td>
+            <td>{{ alert.threat }}</td>
+
+            <td>
+              <span class="px-2 py-1 text-xs rounded
+              {% if alert.severity == 'High' %}bg-red-500
+              {% elif alert.severity == 'Medium' %}bg-yellow-500
+              {% else %}bg-blue-500{% endif %}">
+              {{ alert.severity }}
+              </span>
+            </td>
+
+            <td>{{ alert.date }}</td>
+
+            <td>
+              <span class="px-2 py-1 text-xs bg-red-500 rounded">
+                {{ alert.status }}
+              </span>
+            </td>
+
+            <td>
+              <button class="bg-blue-500 px-3 py-1 rounded text-xs">View</button>
+            </td>
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+
+  </main>
+</div>
+
+<!-- 🔥 SCRIPT -->
+<script>
+const typeFilter = document.getElementById("typeFilter");
+const severityFilter = document.getElementById("severityFilter");
+const searchInput = document.getElementById("searchInput");
+
+const rows = document.querySelectorAll(".alert-row");
+
+function filterAlerts() {
+    const typeValue = typeFilter.value.toLowerCase();
+    const severityValue = severityFilter.value.toLowerCase();
+    const searchValue = searchInput.value.toLowerCase();
+
+    let high = 0, medium = 0, low = 0, total = 0;
+
+    rows.forEach(row => {
+        const type = row.dataset.type.toLowerCase();
+        const severity = row.dataset.severity.toLowerCase();
+        const source = row.dataset.source;
+        const threat = row.dataset.threat;
+
+        let show = true;
+
+        if (typeValue !== "all" && type !== typeValue) show = false;
+        if (severityValue !== "all" && severity !== severityValue) show = false;
+
+        if (searchValue &&
+            !source.includes(searchValue) &&
+            !threat.includes(searchValue)) {
+            show = false;
+        }
+
+        row.style.display = show ? "" : "none";
+
+        // update counts
+        if (show) {
+            total++;
+            if (severity === "high") high++;
+            else if (severity === "medium") medium++;
+            else if (severity === "low") low++;
+        }
+    });
+
+    document.getElementById("highCount").innerText = high;
+    document.getElementById("mediumCount").innerText = medium;
+    document.getElementById("lowCount").innerText = low;
+    document.getElementById("totalCount").innerText = total;
+}
+
+typeFilter.addEventListener("change", filterAlerts);
+severityFilter.addEventListener("change", filterAlerts);
+searchInput.addEventListener("input", filterAlerts);
+</script>
+
+</body>
+</html>

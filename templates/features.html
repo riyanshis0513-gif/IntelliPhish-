@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Features - PhishGuard</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body {
+    background: radial-gradient(circle at top, #020617, #020617);
+}
+
+/* Glow effect */
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 0 30px rgba(59,130,246,0.3);
+    transition: 0.3s ease;
+}
+</style>
+</head>
+
+<body class="text-white">
+
+<!-- NAVBAR -->
+<nav class="flex justify-between items-center px-10 py-5">
+    <h1 class="text-2xl font-bold text-blue-400">🛡️ PhishGuard</h1>
+
+    <div class="space-x-8 hidden md:flex">
+        <a href="/" class="hover:text-blue-400">Home</a>
+        <a href="/features" class="text-blue-400">Features</a>
+        <a href="/about" class="hover:text-blue-400">About</a>
+        <a href="/contact" class="hover:text-blue-400">Contact</a>
+    </div>
+
+    <a href="/admin-login" class="border border-blue-500 px-4 py-2 rounded-lg hover:bg-blue-500">
+        Admin Login
+    </a>
+</nav>
+
+<!-- HERO -->
+<section class="text-center mt-10 px-6">
+
+    <p class="text-blue-400 tracking-widest mb-3">OUR POWERFUL FEATURES</p>
+
+    <h1 class="text-5xl font-bold leading-tight">
+        Smart Protection for <br>
+        <span class="bg-gradient-to-r from-blue-400 to-purple-500 text-transparent bg-clip-text">
+            a Safer Digital World
+        </span>
+    </h1>
+
+    <p class="text-gray-400 mt-4 max-w-xl mx-auto">
+        Advanced AI-powered tools to detect, analyze and prevent phishing threats in real-time.
+    </p>
+
+</section>
+
+<!-- FEATURES GRID -->
+<section class="px-10 py-16">
+
+    <div class="grid md:grid-cols-3 gap-8">
+
+        <!-- CARD -->
+        <a href="/url-scanner" class="card bg-slate-900 p-6 rounded-2xl block">
+            <div class="text-blue-400 text-3xl mb-4">🔗</div>
+            <h2 class="text-xl mb-2">URL Scanner</h2>
+            <p class="text-gray-400">Scan suspicious links using AI detection and threat intelligence.</p>
+            <p class="mt-4 text-blue-400">Explore →</p>
+        </a>
+
+        <!-- CARD -->
+        <a href="/email-scanner" class="card bg-slate-900 p-6 rounded-2xl block">
+            <div class="text-green-400 text-3xl mb-4">📧</div>
+            <h2 class="text-xl mb-2">Email Scanner</h2>
+            <p class="text-gray-400">Detect phishing emails instantly with smart content analysis.</p>
+            <p class="mt-4 text-blue-400">Explore →</p>
+        </a>
+
+        <!-- CARD -->
+        <a href="/domain-analysis" class="card bg-slate-900 p-6 rounded-2xl block">
+            <div class="text-purple-400 text-3xl mb-4">🌐</div>
+            <h2 class="text-xl mb-2">Domain Analysis</h2>
+            <p class="text-gray-400">Analyze domain risk, reputation and trust score instantly.</p>
+            <p class="mt-4 text-blue-400">Explore →</p>
+        </a>
+
+        <!-- CARD -->
+        <a href="/threat-intelligence" class="card bg-slate-900 p-6 rounded-2xl block">
+            <div class="text-red-400 text-3xl mb-4">🛡️</div>
+            <h2 class="text-xl mb-2">Threat Intelligence</h2>
+            <p class="text-gray-400">Real-time updates on global threats and attack patterns.</p>
+            <p class="mt-4 text-blue-400">Explore →</p>
+        </a>
+
+        <!-- CARD -->
+        <a href="/history" class="card bg-slate-900 p-6 rounded-2xl block">
+            <div class="text-cyan-400 text-3xl mb-4">📊</div>
+            <h2 class="text-xl mb-2">Reports & History</h2>
+            <p class="text-gray-400">Track scan history and generate detailed reports.</p>
+            <p class="mt-4 text-blue-400">Explore →</p>
+        </a>
+
+        <!-- CARD -->
+        <a href="/alerts" class="card bg-slate-900 p-6 rounded-2xl block">
+            <div class="text-pink-400 text-3xl mb-4">🚨</div>
+            <h2 class="text-xl mb-2">Alerts</h2>
+            <p class="text-gray-400">Instant alerts for phishing threats and suspicious activity.</p>
+            <p class="mt-4 text-blue-400">Explore →</p>
+        </a>
+
+    </div>
+
+</section>
+
+<!-- BOTTOM FEATURES -->
+<section class="px-10 pb-16">
+
+    <div class="bg-slate-900 rounded-2xl p-6 grid md:grid-cols-4 gap-6 text-center">
+
+        <div>
+            <p class="text-purple-400 text-2xl">⚡</p>
+            <h3 class="mt-2">Real-time</h3>
+            <p class="text-gray-400 text-sm">Lightning fast detection</p>
+        </div>
+
+        <div>
+            <p class="text-green-400 text-2xl">🧠</p>
+            <h3 class="mt-2">AI Powered</h3>
+            <p class="text-gray-400 text-sm">Smart predictions</p>
+        </div>
+
+        <div>
+            <p class="text-yellow-400 text-2xl">🔒</p>
+            <h3 class="mt-2">Secure</h3>
+            <p class="text-gray-400 text-sm">Your data is safe</p>
+        </div>
+
+        <div>
+            <p class="text-pink-400 text-2xl">👥</p>
+            <h3 class="mt-2">User Friendly</h3>
+            <p class="text-gray-400 text-sm">Easy to use interface</p>
+        </div>
+
+    </div>
+
+</section>
+
+</body>
+</html>

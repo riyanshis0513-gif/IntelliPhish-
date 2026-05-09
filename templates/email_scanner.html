@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Email Scanner - Phish Guard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+/* Glow effect */
+.glow {
+  box-shadow: 0 0 20px rgba(59,130,246,0.4);
+}
+</style>
+
+</head>
+
+<body class="bg-[#0b1220] text-white font-sans">
+
+<div class="flex min-h-screen">
+
+  <!-- SIDEBAR -->
+  <div class="w-64 bg-[#0a0f1c] h-screen p-5 border-r border-gray-800">
+
+    <h1 class="text-2xl font-bold mb-8">🛡️ Phish Guard</h1>
+
+    <ul class="space-y-4">
+        <li><a href="/dashboard" class="block hover:text-blue-400">Dashboard</a></li>
+        <li><a href="/url-scanner" class="block text-blue-400">URL Scanner</a></li>
+        <li><a href="/email-scanner" class="block hover:text-blue-400">Email Scanner</a></li>
+        <li><a href="/domain-analysis" class="block hover:text-blue-400">Domain Analysis</a></li>
+        <li><a href="/threat-intelligence" class="block hover:text-blue-400">Threat Intelligence</a></li>
+        <li><a href="/alerts" class="block hover:text-blue-400">Alerts</a></li>
+        <li><a href="/history" class="block hover:text-blue-400">History</a></li>
+        <li><a href="/settings" class="block hover:text-blue-400">Settings</a></li>
+        <li><a href="/logout" class="text-red-400">Logout</a></li>
+    </ul>
+
+</div>
+
+  <!-- MAIN -->
+  <main class="flex-1 p-8 space-y-6">
+
+    <!-- HEADER -->
+    <div class="flex justify-between items-center">
+      <div>
+        <h2 class="text-3xl font-bold">Email Scanner</h2>
+        <p class="text-gray-400">Analyze email content to detect phishing attempts</p>
+      </div>
+
+      <a href="/history" class="bg-blue-500 px-4 py-2 rounded-lg hover:bg-blue-600 glow">
+        📜 Scan History
+      </a>
+    </div>
+
+    <!-- TOP GRID -->
+    <div class="grid grid-cols-2 gap-6">
+
+      <!-- INPUT -->
+      <div class="bg-[#111827] p-6 rounded-xl shadow-lg">
+        <h3 class="mb-3 font-semibold text-blue-400">📧 Paste Email Content</h3>
+
+        <form method="POST">
+          <textarea name="content"
+            class="w-full h-40 p-3 rounded bg-[#020617] border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Paste the email content here..."></textarea>
+
+          <button class="mt-4 bg-blue-500 px-5 py-2 rounded hover:bg-blue-600 glow transition">
+            🚀 Scan Email
+          </button>
+        </form>
+      </div>
+
+      <!-- RESULT -->
+      <div class="bg-[#111827] p-6 rounded-xl shadow-lg">
+        <h3 class="mb-3 font-semibold text-blue-400">🧠 Scan Result</h3>
+
+        {% if result %}
+        
+        <!-- RESULT TEXT -->
+        <div class="text-xl font-bold mb-2
+            {% if status=='safe' %}text-green-400
+            {% elif status=='phishing' %}text-red-400
+            {% elif status=='suspicious' %}text-yellow-400
+            {% endif %}">
+            
+            {% if status=='safe' %}✅ Safe Email
+            {% elif status=='phishing' %}🚨 Phishing Email
+            {% elif status=='suspicious' %}⚠️ Suspicious Email
+            {% endif %}
+        </div>
+
+        <p class="text-gray-300">{{ result }}</p>
+
+        <!-- PROGRESS BAR -->
+        <div class="mt-5">
+          <div class="w-full bg-gray-700 h-3 rounded">
+            <div id="bar"
+              class="h-3 rounded transition-all duration-1000
+              {% if status=='safe' %}bg-green-400 w-[90%]
+              {% elif status=='phishing' %}bg-red-400 w-[95%]
+              {% elif status=='suspicious' %}bg-yellow-400 w-[70%]
+              {% endif %}">
+            </div>
+          </div>
+        </div>
+
+        {% endif %}
+      </div>
+
+    </div>
+
+    <!-- LOWER CARDS -->
+    <div class="grid grid-cols-3 gap-6">
+
+      <!-- OVERVIEW -->
+      <div class="bg-[#111827] p-5 rounded-xl shadow-lg">
+        <h3 class="text-blue-400 mb-2">📊 Email Overview</h3>
+
+        <div class="text-sm space-y-2 text-gray-300">
+          <p><b>Type:</b> Email Content</p>
+          <p><b>Analysis:</b> Keyword Based</p>
+          <p><b>Status:</b>
+            <span class="
+              {% if status=='safe' %}text-green-400
+              {% elif status=='phishing' %}text-red-400
+              {% elif status=='suspicious' %}text-yellow-400
+              {% endif %}">
+              {{ status }}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <!-- RISK -->
+      <div class="bg-[#111827] p-5 rounded-xl shadow-lg">
+        <h3 class="text-yellow-400 mb-2">⚠ Risk Indicators</h3>
+
+        <ul class="text-sm space-y-1 text-gray-300">
+          <li>✔ Links detection</li>
+          <li>✔ Keyword scanning</li>
+          <li>✔ Urgency phrases</li>
+          <li>✔ Suspicious patterns</li>
+        </ul>
+      </div>
+
+      <!-- ACTION -->
+      <div class="bg-[#111827] p-5 rounded-xl shadow-lg">
+        <h3 class="text-green-400 mb-2">✅ What You Can Do</h3>
+
+        <ul class="text-sm space-y-1 text-gray-300">
+          <li>✔ Verify sender</li>
+          <li>✔ Avoid unknown links</li>
+          <li>✔ Do not share credentials</li>
+          <li>✔ Report phishing emails</li>
+        </ul>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

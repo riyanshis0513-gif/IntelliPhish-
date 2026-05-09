@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Activity Logs - Phish Guard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#0b1220] text-white font-sans">
+
+<div class="flex min-h-screen">
+
+  <!-- SIDEBAR -->
+  <div class="w-64 bg-[#0a0f1c] h-screen p-5 border-r border-gray-800">
+
+    <h1 class="text-2xl font-bold mb-8">🛡️ Phish Guard</h1>
+
+    <ul class="space-y-4">
+        <li><a href="/dashboard" class="block hover:text-blue-400">Dashboard</a></li>
+        <li><a href="/url-scanner" class="block text-blue-400">URL Scanner</a></li>
+        <li><a href="/email-scanner" class="block hover:text-blue-400">Email Scanner</a></li>
+        <li><a href="/domain-analysis" class="block hover:text-blue-400">Domain Analysis</a></li>
+        <li><a href="/threat-intelligence" class="block hover:text-blue-400">Threat Intelligence</a></li>
+        <li><a href="/alerts" class="block hover:text-blue-400">Alerts</a></li>
+        <li><a href="/history" class="block hover:text-blue-400">History</a></li>
+        <li><a href="/settings" class="block hover:text-blue-400">Settings</a></li>
+        <li><a href="/logout" class="text-red-400">Logout</a></li>
+    </ul>
+
+</div>
+
+  <!-- MAIN -->
+  <main class="flex-1 p-8 space-y-6">
+
+    <h2 class="text-3xl font-bold">Activity Logs</h2>
+
+    <!-- STATS -->
+    <div class="grid grid-cols-4 gap-6">
+      <div class="bg-blue-900/30 p-5 rounded-xl">
+        <h3 class="text-3xl text-blue-400">{{ total }}</h3>
+        <p>Total</p>
+      </div>
+      <div class="bg-green-900/30 p-5 rounded-xl">
+        <h3 class="text-3xl text-green-400">{{ safe }}</h3>
+        <p>Safe</p>
+      </div>
+      <div class="bg-yellow-900/30 p-5 rounded-xl">
+        <h3 class="text-3xl text-yellow-400">{{ suspicious }}</h3>
+        <p>Suspicious</p>
+      </div>
+      <div class="bg-red-900/30 p-5 rounded-xl">
+        <h3 class="text-3xl text-red-400">{{ phishing }}</h3>
+        <p>Threats</p>
+      </div>
+    </div>
+
+    <!-- FILTERS -->
+    <div class="flex justify-between bg-[#111827] p-4 rounded-xl">
+
+      <div class="flex gap-3">
+        <select id="typeFilter" class="bg-[#020617] p-2 rounded border border-gray-700">
+          <option value="all">All Types</option>
+          <option value="URL">URL</option>
+          <option value="Email">Email</option>
+          <option value="Domain">Domain</option>
+        </select>
+
+        <select id="statusFilter" class="bg-[#020617] p-2 rounded border border-gray-700">
+          <option value="all">All Status</option>
+          <option value="safe">Safe</option>
+          <option value="suspicious">Suspicious</option>
+          <option value="phishing">Phishing</option>
+        </select>
+      </div>
+
+      <input id="searchInput" type="text" placeholder="Search logs..."
+        class="bg-[#020617] p-2 rounded border border-gray-700 w-64">
+    </div>
+
+    <!-- TABLE -->
+    <div class="bg-[#111827] rounded-xl overflow-hidden">
+
+      <table class="w-full text-sm">
+        <thead class="bg-[#020617] text-gray-400">
+          <tr>
+            <th class="p-3">Time</th>
+            <th>Activity</th>
+            <th>Type</th>
+            <th>Source</th>
+            <th>Status</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for log in logs %}
+          <tr class="log-row border-b border-gray-800"
+              data-type="{{ log.type }}"
+              data-status="{{ log.status }}"
+              data-source="{{ log.source | lower }}"
+              data-result="{{ log.result | lower }}">
+
+            <td class="p-3">{{ log.date }}</td>
+
+            <td>URL Scanned</td>
+
+            <td>
+              <span class="px-2 py-1 bg-blue-500 text-xs rounded">
+                {{ log.type }}
+              </span>
+            </td>
+
+            <td>{{ log.source }}</td>
+
+            <td>
+              <span class="px-2 py-1 text-xs rounded
+                {% if log.status == 'safe' %}bg-green-500
+                {% elif log.status == 'suspicious' %}bg-yellow-500
+                {% else %}bg-red-500{% endif %}">
+                {{ log.status }}
+              </span>
+            </td>
+
+            <td>{{ log.result }}</td>
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </div>
+
+  </main>
+</div>
+
+<!-- 🔥 FILTER SCRIPT -->
+<script>
+const typeFilter = document.getElementById("typeFilter");
+const statusFilter = document.getElementById("statusFilter");
+const searchInput = document.getElementById("searchInput");
+
+const rows = document.querySelectorAll(".log-row");
+
+function filterLogs() {
+    const typeValue = typeFilter.value.toLowerCase();
+    const statusValue = statusFilter.value.toLowerCase();
+    const searchValue = searchInput.value.toLowerCase();
+
+    rows.forEach(row => {
+        const type = row.dataset.type.toLowerCase();
+        const status = row.dataset.status.toLowerCase();
+        const source = row.dataset.source;
+        const result = row.dataset.result;
+
+        let show = true;
+
+        if (typeValue !== "all" && type !== typeValue) show = false;
+        if (statusValue !== "all" && status !== statusValue) show = false;
+
+        if (searchValue &&
+            !source.includes(searchValue) &&
+            !result.includes(searchValue)) {
+            show = false;
+        }
+
+        row.style.display = show ? "" : "none";
+    });
+}
+
+typeFilter.addEventListener("change", filterLogs);
+statusFilter.addEventListener("change", filterLogs);
+searchInput.addEventListener("input", filterLogs);
+</script>
+
+</body>
+</html>

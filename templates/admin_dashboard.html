@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 text-white">
+
+<!-- Navbar -->
+<div class="bg-gray-800 p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-green-400">Admin Dashboard ⚙️</h1>
+
+    <a href="/logout"
+       class="bg-red-500 px-4 py-2 rounded hover:bg-red-600">
+        Logout
+    </a>
+</div>
+
+<!-- Content -->
+<div class="p-6">
+
+    <!-- Welcome -->
+    <div class="bg-gray-800 p-6 rounded-xl shadow mb-6">
+        <h2 class="text-xl font-semibold">Welcome, Admin 👋</h2>
+        <p class="text-gray-400 mt-2">
+            Manage all registered users below.
+        </p>
+    </div>
+
+    <!-- ✅ NEW: ANALYTICS CARDS -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+
+        <div class="bg-gray-800 p-4 rounded-xl text-center shadow">
+            <h3 class="text-gray-400">Users</h3>
+            <p class="text-2xl font-bold text-blue-400">{{ total_users }}</p>
+        </div>
+
+        <div class="bg-gray-800 p-4 rounded-xl text-center shadow">
+            <h3 class="text-gray-400">Scans</h3>
+            <p class="text-2xl font-bold text-yellow-400">{{ total_scans }}</p>
+        </div>
+
+        <div class="bg-gray-800 p-4 rounded-xl text-center shadow">
+            <h3 class="text-gray-400">Safe</h3>
+            <p class="text-2xl font-bold text-green-400">{{ safe_count }}</p>
+        </div>
+
+        <div class="bg-gray-800 p-4 rounded-xl text-center shadow">
+            <h3 class="text-gray-400">Phishing</h3>
+            <p class="text-2xl font-bold text-red-400">{{ phishing_count }}</p>
+        </div>
+
+    </div>
+
+    <!-- USERS TABLE -->
+    <div class="bg-gray-800 p-6 rounded-xl shadow overflow-x-auto">
+
+        <h2 class="text-xl font-semibold mb-4 text-blue-400">
+            👥 Registered Users
+        </h2>
+
+        <table class="w-full text-left border-collapse">
+
+            <thead>
+                <tr class="border-b border-gray-600">
+                    <th class="py-2 px-2">Username</th>
+                    <th class="py-2 px-2">Email</th>
+                    <th class="py-2 px-2">Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% if users|length > 0 %}
+                    {% for user in users %}
+                    <tr class="border-b border-gray-700 hover:bg-gray-700">
+                        <td class="py-2 px-2">{{ user[0] }}</td>
+                        <td class="py-2 px-2">{{ user[1] }}</td>
+
+                        <td class="py-2 px-2">
+                            <a href="/delete-user/{{ user[1] }}"
+                               onclick="return confirm('Are you sure you want to delete this user?')"
+                               class="bg-red-500 px-3 py-1 rounded hover:bg-red-600 text-sm">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="3" class="text-center py-4 text-gray-400">
+                            No users found.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- HISTORY TABLE -->
+    <div class="bg-gray-800 p-6 rounded-xl shadow overflow-x-auto mt-6">
+
+        <h2 class="text-xl font-semibold mb-4 text-green-400">
+            📊 Scan History (All Users)
+        </h2>
+
+        <table class="w-full text-left border-collapse">
+
+            <thead>
+                <tr class="border-b border-gray-600">
+                    <th class="py-2 px-2">User</th>
+                    <th class="py-2 px-2">URL</th>
+                    <th class="py-2 px-2">Result</th>
+                    <th class="py-2 px-2">Status</th>
+                    <th class="py-2 px-2">Date</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% if history|length > 0 %}
+                    {% for row in history %}
+                    <tr class="border-b border-gray-700 hover:bg-gray-700">
+
+                        <td class="py-2 px-2 text-blue-400">
+                            {{ row[0] }}
+                        </td>
+
+                        <td class="py-2 px-2 break-all">
+                            {{ row[1] }}
+                        </td>
+
+                        <td class="py-2 px-2">
+                            {{ row[2] }}
+                        </td>
+
+                        <td class="py-2 px-2">
+                            {% if row[3] == 'safe' %}
+                                <span class="text-green-400 font-semibold">Safe</span>
+                            {% elif row[3] == 'phishing' %}
+                                <span class="text-red-400 font-semibold">Phishing</span>
+                            {% elif row[3] == 'suspicious' %}
+                                <span class="text-yellow-400 font-semibold">Suspicious</span>
+                            {% else %}
+                                <span class="text-gray-400">Unknown</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="py-2 px-2 text-gray-400">
+                            {{ row[4] }}
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center py-4 text-gray-400">
+                            No scan history available.
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>

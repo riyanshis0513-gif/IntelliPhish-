@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Domain Analysis - Phish Guard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+.glow {
+  box-shadow: 0 0 20px rgba(59,130,246,0.4);
+}
+</style>
+
+</head>
+
+<body class="bg-[#0b1220] text-white font-sans">
+
+<div class="flex min-h-screen">
+
+  <!-- SIDEBAR -->
+ <div class="w-64 bg-[#0a0f1c] h-screen p-5 border-r border-gray-800">
+
+    <h1 class="text-2xl font-bold mb-8">🛡️ Phish Guard</h1>
+
+    <ul class="space-y-4">
+        <li><a href="/dashboard" class="block hover:text-blue-400">Dashboard</a></li>
+        <li><a href="/url-scanner" class="block text-blue-400">URL Scanner</a></li>
+        <li><a href="/email-scanner" class="block hover:text-blue-400">Email Scanner</a></li>
+        <li><a href="/domain-analysis" class="block hover:text-blue-400">Domain Analysis</a></li>
+        <li><a href="/threat-intelligence" class="block hover:text-blue-400">Threat Intelligence</a></li>
+        <li><a href="/alerts" class="block hover:text-blue-400">Alerts</a></li>
+        <li><a href="/history" class="block hover:text-blue-400">History</a></li>
+        <li><a href="/settings" class="block hover:text-blue-400">Settings</a></li>
+        <li><a href="/logout" class="text-red-400">Logout</a></li>
+    </ul>
+
+</div>
+
+  <!-- MAIN -->
+  <main class="flex-1 p-8 space-y-6">
+
+    <!-- HEADER -->
+    <div>
+      <h2 class="text-3xl font-bold">Domain Analysis</h2>
+      <p class="text-gray-400">Analyze domain reputation and threats</p>
+    </div>
+
+    <!-- INPUT + RESULT -->
+    <div class="grid grid-cols-2 gap-6">
+
+      <!-- INPUT -->
+      <div class="bg-[#111827] p-6 rounded-xl shadow-lg">
+        <h3 class="text-blue-400 mb-3">🌐 Analyze Domain</h3>
+
+        <form method="POST" class="flex gap-3">
+          <input type="text" name="url"
+            class="flex-1 p-3 rounded bg-[#020617] border border-gray-700 focus:outline-none"
+            placeholder="example.com">
+
+          <button class="bg-blue-500 px-5 py-2 rounded hover:bg-blue-600 glow">
+            Analyze
+          </button>
+        </form>
+
+        <p class="text-gray-400 mt-3 text-sm">
+          Enter a domain to perform security analysis.
+        </p>
+      </div>
+
+      <!-- RESULT -->
+      <div class="bg-[#111827] p-6 rounded-xl shadow-lg">
+
+        {% if result %}
+
+        <h3 class="text-blue-400 mb-3">📊 Analysis Result</h3>
+
+        <!-- STATUS -->
+        <div class="flex justify-between items-center">
+
+          <div>
+            <h2 class="text-2xl font-bold
+              {% if result.risk == 'Low' %}text-green-400
+              {% elif result.risk == 'Medium' %}text-yellow-400
+              {% else %}text-red-400{% endif %}">
+              {{ result.risk }} Risk
+            </h2>
+
+            <p class="text-gray-400">Domain security level</p>
+          </div>
+
+          <!-- SCORE CIRCLE -->
+          <div class="w-20 h-20 rounded-full border-4 flex items-center justify-center
+            {% if result.risk == 'Low' %}border-green-400
+            {% elif result.risk == 'Medium' %}border-yellow-400
+            {% else %}border-red-400{% endif %}">
+            
+            <span class="text-lg font-bold">
+              {% if result.risk == 'Low' %}25
+              {% elif result.risk == 'Medium' %}60
+              {% else %}90{% endif %}
+            </span>
+          </div>
+
+        </div>
+
+        {% endif %}
+      </div>
+
+    </div>
+
+    <!-- INFO + BREAKDOWN -->
+    {% if result %}
+    <div class="grid grid-cols-2 gap-6">
+
+      <!-- DOMAIN INFO -->
+      <div class="bg-[#111827] p-5 rounded-xl">
+        <h3 class="text-blue-400 mb-3">📌 Domain Information</h3>
+
+        <p><b>Domain:</b> {{ result.domain }}</p>
+        <p><b>Risk Level:</b> {{ result.risk }}</p>
+      </div>
+
+      <!-- RISK BREAKDOWN -->
+      <div class="bg-[#111827] p-5 rounded-xl">
+        <h3 class="text-blue-400 mb-3">⚠ Risk Breakdown</h3>
+
+        <ul class="space-y-2 text-sm">
+          {% for reason in result.reason %}
+            <li>✔ {{ reason }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- LOWER CARDS -->
+    <div class="grid grid-cols-3 gap-6">
+
+      <!-- THREATS -->
+      <div class="bg-[#111827] p-5 rounded-xl">
+        <h3 class="text-yellow-400 mb-2">⚠ Threat Indicators</h3>
+
+        <ul class="text-sm space-y-1">
+          {% for reason in result.reason %}
+            <li>• {{ reason }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- PREVIEW -->
+      <div class="bg-[#111827] p-5 rounded-xl">
+        <h3 class="text-blue-400 mb-2">🌍 Domain Preview</h3>
+        <div class="bg-white text-black p-3 rounded text-sm">
+          {{ result.domain }}
+        </div>
+      </div>
+
+      <!-- RECOMMEND -->
+      <div class="bg-[#111827] p-5 rounded-xl">
+        <h3 class="text-green-400 mb-2">✅ Recommendations</h3>
+
+        <ul class="text-sm space-y-1">
+          <li>✔ Verify domain before use</li>
+          <li>✔ Avoid suspicious links</li>
+          <li>✔ Check HTTPS security</li>
+        </ul>
+      </div>
+
+    </div>
+    {% endif %}
+
+  </main>
+</div>
+
+</body>
+</html>

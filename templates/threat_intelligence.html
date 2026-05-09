@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Threat Intelligence</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 text-white flex">
+
+<!-- SIDEBAR -->
+<div class="w-64 bg-[#0a0f1c] h-screen p-5 border-r border-gray-800">
+
+    <h1 class="text-2xl font-bold mb-8">🛡️ Phish Guard</h1>
+
+    <ul class="space-y-4">
+        <li><a href="/dashboard" class="block hover:text-blue-400">Dashboard</a></li>
+        <li><a href="/url-scanner" class="block text-blue-400">URL Scanner</a></li>
+        <li><a href="/email-scanner" class="block hover:text-blue-400">Email Scanner</a></li>
+        <li><a href="/domain-analysis" class="block hover:text-blue-400">Domain Analysis</a></li>
+        <li><a href="/threat-intelligence" class="block hover:text-blue-400">Threat Intelligence</a></li>
+        <li><a href="/alerts" class="block hover:text-blue-400">Alerts</a></li>
+        <li><a href="/history" class="block hover:text-blue-400">History</a></li>
+        <li><a href="/settings" class="block hover:text-blue-400">Settings</a></li>
+        <li><a href="/logout" class="text-red-400">Logout</a></li>
+    </ul>
+
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="flex-1 p-6">
+
+<!-- HEADER -->
+<div class="flex justify-between items-center mb-6">
+    <div>
+        <h1 class="text-3xl font-bold text-green-400">🧠 Threat Intelligence</h1>
+        <p class="text-gray-400">Real-time insights about threats</p>
+    </div>
+
+    <button class="bg-green-500 px-4 py-2 rounded hover:bg-green-600">
+        Export Report
+    </button>
+</div>
+
+<!-- STATS CARDS -->
+<div class="grid grid-cols-4 gap-6 mb-6">
+
+    <div class="bg-[#0f172a]/70 backdrop-blur-lg border border-gray-700 p-4 rounded-xl shadow">
+        <h2 class="text-gray-400">Total Threats</h2>
+        <p class="text-2xl font-bold text-red-400">
+            {{ stats.phishing + stats.suspicious }}
+        </p>
+    </div>
+
+    <div class="bg-[#0f172a]/70 backdrop-blur-lg border border-gray-700 p-4 rounded-xl shadow">
+        <h2 class="text-gray-400">High Risk</h2>
+        <p class="text-2xl font-bold text-red-500">
+            {{ stats.phishing }}
+        </p>
+    </div>
+
+    <div class="bg-[#0f172a]/70 backdrop-blur-lg border border-gray-700 p-4 rounded-xl shadow">
+        <h2 class="text-gray-400">Medium Risk</h2>
+        <p class="text-2xl font-bold text-yellow-400">
+            {{ stats.suspicious }}
+        </p>
+    </div>
+
+    <div class="bg-[#0f172a]/70 backdrop-blur-lg border border-gray-700 p-4 rounded-xl shadow">
+        <h2 class="text-gray-400">Low Risk</h2>
+        <p class="text-2xl font-bold text-green-400">
+            {{ stats.safe }}
+        </p>
+    </div>
+
+</div>
+
+<!-- SEARCH + FILTER -->
+<div class="flex justify-between mb-4">
+    <input type="text" placeholder="Search threats..."
+           class="bg-gray-800 p-2 rounded w-1/3">
+
+    <button class="bg-gray-700 px-4 py-2 rounded hover:bg-gray-600">
+        Filter
+    </button>
+</div>
+
+<!-- TABLE -->
+<div class="bg-[#0f172a]/70 backdrop-blur-lg border border-gray-700 rounded-xl p-4">
+
+<table class="w-full text-left">
+
+<tr class="border-b border-gray-700">
+<th class="p-2">URL</th>
+<th class="p-2">Threat Level</th>
+<th class="p-2">Date</th>
+</tr>
+
+{% for t in threats %}
+<tr class="border-b border-gray-700">
+
+<td class="p-2">{{ t[0] }}</td>
+
+<td class="p-2">
+    {% if t[1] == "phishing" %}
+        <span class="bg-red-500 px-2 py-1 rounded text-sm">High</span>
+    {% elif t[1] == "suspicious" %}
+        <span class="bg-yellow-400 text-black px-2 py-1 rounded text-sm">Medium</span>
+    {% else %}
+        <span class="bg-green-500 px-2 py-1 rounded text-sm">Low</span>
+    {% endif %}
+</td>
+
+<td class="p-2">{{ t[2] }}</td>
+
+</tr>
+{% endfor %}
+
+{% if not threats %}
+<tr>
+    <td colspan="3" class="text-center text-gray-400 py-4">
+        No threats detected yet
+    </td>
+</tr>
+{% endif %}
+
+</table>
+
+</div>
+
+<!-- INFO BOX -->
+<div class="mt-6 bg-[#0f172a]/70 backdrop-blur-lg border border-gray-700 p-4 rounded-xl">
+    <h2 class="text-green-400 mb-2">About Threat Intelligence</h2>
+    <p class="text-gray-400 text-sm">
+        This module collects and analyzes suspicious URLs and emails
+        to help detect phishing and cyber threats in real time.
+    </p>
+</div>
+
+</div>
+
+</body>
+</html>
